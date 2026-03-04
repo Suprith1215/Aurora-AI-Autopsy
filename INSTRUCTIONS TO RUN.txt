@@ -1,0 +1,5 @@
+cd D:\ai-reliability-project\ai-engineering-hub `
+; & D:\ai-reliability-project\.venv\Scripts\Activate.ps1 `
+; pip install langchain-ollama streamlit `
+; python ai_failure_autopsy\run_pipeline.py `
+; python -m streamlit run ai_failure_autopsy\ui\dashboard.py
