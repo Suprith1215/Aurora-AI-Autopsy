@@ -55,6 +55,7 @@ class InjectRequest(BaseModel):
 class ChaosRequest(BaseModel):
     type: str = "hallucination"
 
+@app.get("/api")
 @app.get("/")
 def home():
     return {

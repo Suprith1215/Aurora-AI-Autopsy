@@ -90,7 +90,7 @@ export default function NeuralCommandCenter() {
   const galaxyCanvasRef = useRef<HTMLCanvasElement>(null);
   const radarCanvasRef = useRef<HTMLCanvasElement>(null);
   
-  const API_BASE = "http://localhost:8504";
+  const API_BASE = "";
 
   // --- Speeches & System Sound Effects ---
   const playSound = (type: "alert" | "click" | "success" | "init" | "ping") => {
