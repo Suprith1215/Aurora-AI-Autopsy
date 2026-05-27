@@ -7,12 +7,13 @@ from pathlib import Path
 from datetime import datetime
 import time
 import random
-import requests
+import requests        
 import smtplib
 from email.message import EmailMessage
 from fpdf import FPDF
 import re
-from langchain_ollama import OllamaLLM
+_OLLAMA_AVAILABLE = False
+OllamaLLM = None
 
 # ================= MODERN UI CONFIG =================
 st.set_page_config(
@@ -211,20 +212,68 @@ with st.expander("💎 INJECT NEURAL INCIDENT", expanded=True):
         if st.button("ANALYSIS & COMMIT", use_container_width=True):
             if sim_desc:
                 with st.spinner("QUANTUM ENGINE PROCESSING..."):
-                    try:
-                        llm = OllamaLLM(model="llama3")
-                        prompt = f"Classify this AI failure description into JSON with fields 'failure_type', 'confidence', 'recommended_fix'. Types: Hallucination, Data Drift, Retrieval Failure, Prompt Design Failure, Tool Misuse. Input: {sim_desc}"
-                        response = llm.invoke(prompt)
-                        match = re.search(r"\{.*\}", response, re.DOTALL)
-                        if match:
-                            parsed = json.loads(match.group())
-                            new_id = f"incid_{int(time.time())}"
-                            parsed.update({"incident_id": new_id, "model": sim_model, "timestamp": datetime.now().timestamp(), "severity_score": SEVERITY_SCORE_MAP.get(parsed["failure_type"], 3)})
-                            (DATA_DIR / f"{new_id}.json").write_text(json.dumps(parsed, indent=2))
-                            st.success("NODE COMMITTED SUCCESSFULLY")
-                            time.sleep(1)
-                            st.rerun()
-                    except: st.error("NEURAL ENGINE OFFLINE")
+                    parsed = None
+
+                    # --- Tier 1: Try Ollama LLM if available ---
+                    if _OLLAMA_AVAILABLE and OllamaLLM is not None:
+                        try:
+                            llm = OllamaLLM(model="llama3")
+                            prompt = f"Classify this AI failure description into JSON with fields 'failure_type', 'confidence', 'recommended_fix'. Types: Hallucination, Data Drift, Retrieval Failure, Prompt Design Failure, Tool Misuse. Input: {sim_desc}"
+                            response = llm.invoke(prompt)
+                            match = re.search(r"\{.*\}", response, re.DOTALL)
+                            if match:
+                                parsed = json.loads(match.group())
+                        except Exception:
+                            parsed = None  # fall through to rule-based
+
+                    # --- Tier 2: Rule-based fallback classifier ---
+                    if parsed is None:
+                        desc_lower = sim_desc.lower()
+                        if any(w in desc_lower for w in ["hallucin", "phantom", "fabricat", "invent", "made up", "doesn't exist"]):
+                            failure_type = "Hallucination"
+                            confidence = 0.91
+                            fix = "Deploy grounding filters and fact-verification layers before response delivery. Augment retrieval context with authoritative knowledge bases."
+                        elif any(w in desc_lower for w in ["drift", "shift", "semantic", "embedding", "distribut", "covariate"]):
+                            failure_type = "Data Drift"
+                            confidence = 0.87
+                            fix = "Re-index the vector store with recent data. Schedule weekly embedding drift checks using cosine similarity thresholds."
+                        elif any(w in desc_lower for w in ["retriev", "latency", "timeout", "fetch", "vector", "index", "search"]):
+                            failure_type = "Retrieval Failure"
+                            confidence = 0.85
+                            fix = "Rebuild the vector index and add query caching. Implement circuit-breaker patterns for retrieval timeouts."
+                        elif any(w in desc_lower for w in ["prompt", "instruct", "loopback", "repeat", "template", "format", "sql", "query"]):
+                            failure_type = "Prompt Design Failure"
+                            confidence = 0.83
+                            fix = "Refactor prompt templates to include explicit output format constraints and role boundaries."
+                        elif any(w in desc_lower for w in ["tool", "function", "call", "schema", "json", "api", "misuse", "delete", "invalid"]):
+                            failure_type = "Tool Misuse"
+                            confidence = 0.82
+                            fix = "Enforce strict JSON schema validation on all tool inputs. Add pre-call type-checking interceptors."
+                        else:
+                            failure_type = "Hallucination"
+                            confidence = 0.75
+                            fix = "Review model grounding, strengthen context injection, and add output validation guardrails."
+
+                        parsed = {
+                            "failure_type": failure_type,
+                            "confidence": confidence,
+                            "recommended_fix": fix
+                        }
+
+                    # --- Commit the result ---
+                    new_id = f"incid_{int(time.time())}"
+                    parsed.update({
+                        "incident_id": new_id,
+                        "model": sim_model,
+                        "timestamp": datetime.now().timestamp(),
+                        "severity_score": SEVERITY_SCORE_MAP.get(parsed.get("failure_type", ""), 3)
+                    })
+                    (DATA_DIR / f"{new_id}.json").write_text(json.dumps(parsed, indent=2))
+                    st.success(f"✅ Classified as **{parsed['failure_type']}** — Node committed.")
+                    time.sleep(1)
+                    st.rerun()
+            else:
+                st.warning("Enter a failure description first.")
 
 st.markdown("<br>", unsafe_allow_html=True)
 

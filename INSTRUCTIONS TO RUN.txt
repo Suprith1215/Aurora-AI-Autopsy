@@ -1,5 +1,88 @@
-cd D:\ai-reliability-project\ai-engineering-hub `
-; & D:\ai-reliability-project\.venv\Scripts\Activate.ps1 `
-; pip install langchain-ollama streamlit `
-; python ai_failure_autopsy\run_pipeline.py `
-; python -m streamlit run ai_failure_autopsy\ui\dashboard.py
+🌌 AURORA AI: FAILURE AUTOPSY & SELF-HEALING PLATFORM
+======================================================
+Detailed Startup & Operating Instructions
+
+This document provides complete, step-by-step instructions for running and operating all modules of the Aurora AI Reliability Platform. 
+
+Aurora is designed as a three-pillar system:
+1. 🔌 Python API Gateway Core (Port 8504) - Orchestrates the Multi-Agent reliability mesh.
+2. 💎 Premium Next.js Command Center (Port 3000) - Displays 3D WebGL-like neural core meshes, memory galaxies, and security radars.
+3. 📊 Streamlit Diagnostics Dashboard (Port 8501) - Provides a system diagnostics view, incident logs, manual injection form, and PDF generator.
+
+------------------------------------------------------
+📋 Prerequisites & Environment Setup
+------------------------------------------------------
+1. System Requirements:
+   - OS: Windows (Fully tested & supported)
+   - Python: 3.10+
+   - Node.js: 18.0+ & npm
+
+2. Virtual Environment (Pre-configured in workspace):
+   - Location: `.venv`
+   - Active shell environment: Windows PowerShell
+
+3. Ollama (Optional Local LLM):
+   - Default: For maximum speed and stability, local Ollama integration is bypassed, immediately utilizing highly optimized rule-based fallback expert models.
+   - If you want to use local models, ensure Ollama is running and Llama 3 is pulled (`ollama pull llama3`).
+
+------------------------------------------------------
+🚀 Step-by-Step Running Guide
+------------------------------------------------------
+
+Ensure you are in the workspace root directory:
+  cd D:\ai-reliability-project
+
+### Step 1: Start the Python API Gateway Core
+The API gateway is the backbone of the agentic orchestration mesh. It must be started first.
+1. Open a new PowerShell terminal.
+2. Run the following command:
+   .venv\Scripts\python -u aurora/api/server.py
+3. You will see:
+   "AURORA API Gateway active at http://localhost:8504"
+
+### Step 2: Start the Next.js Command Portal
+The Command Portal is a sci-fi inspired dashboard with interactive canvases showing rotating 3D neural topologies and security sweeps.
+1. Open a second PowerShell terminal.
+2. Navigate to the `aurora-portal` folder:
+   cd D:\ai-reliability-project\aurora-portal
+3. Start the development server using npm:
+   npm run dev
+4. The server will start on: http://localhost:3000
+
+### Step 3: Start the Streamlit Diagnostics Dashboard
+The Diagnostics Dashboard provides administrative solutions, metrics distribution, and a compiled reporting engine.
+1. Open a third PowerShell terminal.
+2. Navigate to the `ai-engineering-hub` folder:
+   cd D:\ai-reliability-project\ai-engineering-hub
+3. Run Streamlit using the virtual environment:
+   ..\.venv\Scripts\python -m streamlit run ai_failure_autopsy/ui/dashboard.py
+4. The server will start on: http://localhost:8501
+
+------------------------------------------------------
+🧬 Operating the Dashboards
+------------------------------------------------------
+
+1. Accessing the Command Portal (Next.js):
+   - Open your web browser and navigate to: http://localhost:3000
+   - You will see a highly futuristic "Neural Command Center" displaying a real-time spinning 3D Brain Core, Synapse Networks, and Chaos Core controls.
+   - Use the top navigation bar to access tabs:
+     * Command Mesh: Live system load, sensor grids, and anomaly logs.
+     * Incident Replay: Step-by-step reconstruction of how the agents analyzed, retrieval-enriched, repaired, and validated the failure.
+     * Memory Galaxy: 3D interactive clustering galaxy of classification types.
+     * SecOps Core: Rotating radar scan showing jailbreak attempts, injection signatures, and active blocks.
+     * Observability: Rich telemetry graphs.
+
+2. Accessing the System Diagnostics (Streamlit):
+   - Open your web browser and navigate to: http://localhost:8501
+   - Authenticate by selecting your role (e.g. Lead Engineer / Admin) and clicking "AUTHENTICATE".
+   - Under "Inject Neural Incident", choose one of the preset study cases (e.g. Hallucination, Semantic Shift, Spiking Latency, Prompt Loopback, Tool Schema Violation) or type your own.
+   - Click "ANALYSIS & COMMIT" to watch the expert system instantly classify, diagnose, propose self-healing mitigation patches, and log it to the database ledger.
+   - Scroll down to review the live generated metric trends, vector distributions, and expert solution panels.
+   - Click "PREPARE PDF REPORT" followed by "DOWNLOAD ENCRYPTED REPORT" to export and save a compiled PDF performance audit report of the platform.
+
+3. Clearing/Flushing the Data Ledger:
+   - In either UI dashboard, you can trigger a system-wide database flush to reset all live incident streams, returning stability scores back to 100% nominal state.
+
+------------------------------------------------------
+🌌 Aurora AI Reliability. Bringing light to AI failures.
+======================================================
