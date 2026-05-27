@@ -38,3 +38,8 @@ data/
 # OS
 .DS_Store
 Thumbs.db
+
+# AI Engineering Hub and Backups
+ai-engineering-hub/
+ai-engineering-hub_git_backup/
+
